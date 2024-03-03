@@ -194,14 +194,15 @@ san_args() {
 # 2 - (optional) "bytes"
 num2human() {
 	i=${1:-0} s=0
+	case "$2" in bytes) m=1024 ;; '') m=1000 ;; *) return 1; esac
 	for S in B KiB MiB TiB PiB; do
-		[ $((i > 1024 && s < 4)) = 0 ] && break
+		[ $((i > m && s < 4)) = 0 ] && break
 		d=$i
-		i=$((i / 1024))
+		i=$((i / m))
 		s=$((s + 1))
 	done
 	[ "$2" != bytes ] && { S=${S%B}; S=${S%i}; }
-	d=$((d % 1024 * 100 / 1024))
+	d=$((d % m * 100 / m))
 	case $d in
 		0) printf "%s%s\n" "$i" "$S"; return ;;
 		[1-9]) f="02" ;;
