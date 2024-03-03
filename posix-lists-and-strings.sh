@@ -5,7 +5,7 @@
 # Copyright: friendly bits
 # github.com/friendly-bits
 
-# NOTE that some functions only work properly with LC=ALL
+# NOTE that some functions only work properly with LC_ALL=C
 # NOTE that some functions require the $delim and/or the $_nl variables to be set
 # NOTE that some functions depend on other functions included in this library
 
