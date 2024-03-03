@@ -191,7 +191,7 @@ san_args() {
 	done
 }
 
-# converts input integer to either 'xK, xM, xT xQ' or 'xKiB xMiB xTiB xPiB', depending on $2
+# converts input integer to either 'x, xK, xM, xT xQ' or 'xB, xKiB xMiB xTiB xPiB', depending on $2
 # if result is not an integer, outputs up to 2 digits after decimal point
 # 1 - int
 # 2 - (optional) "bytes"
