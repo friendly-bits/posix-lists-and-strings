@@ -2,6 +2,9 @@
 
 # POSIX-compliant shell functions for lists and strings manipulation
 
+# Copyright: friendly bits
+# github.com/friendly-bits
+
 # NOTE that some functions only work properly with LC=ALL
 # NOTE that some functions require the $delim variable to be set
 # NOTE that some functions depend on other functions included in this library
