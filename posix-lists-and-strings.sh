@@ -14,8 +14,8 @@
 
 # sets some useful variables for colors and ascii delimiter
 set_ascii() {
-	set -- $(printf '\033[0;31m \033[0;32m \033[1;34m \033[1;33m \033[0;35m \033[0m \35')
-	red="$1" green="$2" blue="$3" yellow="$4" purple="$5" nocolor="$6" delim="$7"
+	set -- $(printf '\033[0;31m \033[0;32m \033[1;34m \033[1;33m \033[0;35m \033[0m \35 \t')
+	red="$1" green="$2" blue="$3" yellow="$4" purple="$5" nocolor="$6" delim="$7" trim_IFS=" $8"
 }
 
 # removes ASCII colors from the input string $1, outpus resulting string
