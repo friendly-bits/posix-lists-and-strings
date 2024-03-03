@@ -84,7 +84,7 @@ trimsp() {
 	oldifs trim
 }
 
-# removes duplicate words, removes leading and trailing delimiter, trims in-between whitespaces
+# removes duplicate words, removes leading and trailing delimiter, trims in-between extra delimiter characters
 # by default expects a newline-delimited list
 # (1) - optional -s to delimit both input and output by whitespace
 # 1 - var name for output
