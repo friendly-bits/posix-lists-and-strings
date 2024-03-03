@@ -27,4 +27,6 @@ All functions are tested and working.
 
 Read code comments to understand what each function is doing and how to use it.
 
+If you are interested in POSIX-compliant shell code, check out my other repositories.
+
 You can show your appreciation by giving this repository a star.
