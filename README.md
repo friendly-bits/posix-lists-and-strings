@@ -21,6 +21,8 @@ Included functions:
 - san_args()
 - num2human()
 
+All functions are implemented in shell code (no external binaries called), except remove_colors() which uses sed.
+
 Read code comments to understand what each function is doing and how to use it.
 All functions are tested and working.
 
