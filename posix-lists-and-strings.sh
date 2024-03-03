@@ -202,7 +202,7 @@ num2human() {
 		i=$((i / m))
 		s=$((s + 1))
 	done
-	[ "$2" != bytes ] && { S=${S%B}; S=${S%i}; }
+	[ -z "$2" ] && { S=${S%B}; S=${S%i}; [ "$S" = P ] && S=Q; }
 	d=$((d % m * 100 / m))
 	case $d in
 		0) printf "%s%s\n" "$i" "$S"; return ;;
