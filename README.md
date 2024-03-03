@@ -23,7 +23,8 @@ Included functions:
 
 All functions are implemented in shell code (no external binaries called), except remove_colors() which uses sed.
 
-Read code comments to understand what each function is doing and how to use it.
 All functions are tested and working.
+
+Read code comments to understand what each function is doing and how to use it.
 
 You can show your appreciation by giving this repository a star.
