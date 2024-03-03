@@ -117,12 +117,12 @@ is_included() {
 # output via variable with name $3
 get_intersection() {
 	[ ! "$1" ] || [ ! "$2" ] && { eval "$3"=''; return 1; }
-	_fs="${4:-"$_nl"}"
+	_fs_gi="${4:-"$_nl"}"
 	_isect=
 	for e in $2; do
-		is_included "$e" "$1" "$_fs" && { is_included "$e" "$_isect" || _isect="$_isect$e$_fs"; }
+		is_included "$e" "$1" "$_fs_gi" && { is_included "$e" "$_isect" || _isect="$_isect$e$_fs_gi"; }
 	done
-	eval "$3"='${_isect%$_fs}'
+	eval "$3"='${_isect%$_fs_gi}'
 }
 
 # get difference between lists $1 and $2, with optional field separator $4 (otherwise uses newline)
