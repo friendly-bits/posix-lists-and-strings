@@ -135,7 +135,8 @@ get_difference() {
 	_fs_gd="${4:-"$_nl"}"
 	subtract_a_from_b "$1" "$2" "_diff1" "$_fs_gd"
 	subtract_a_from_b "$2" "$1" "_diff2" "$_fs_gd"
-	_diff="$_diff1$_diff2"
+	_diff="$_diff1$_fs_gd$_diff2"
+	_diff="${_diff#$_fs_gd}"
 	eval "$3"='${_diff%$_fs_gd}'
 }
 
