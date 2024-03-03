@@ -21,7 +21,7 @@ Included functions:
 - san_args()
 - num2human()
 
-All functions are implemented in shell code (no external binaries called), except remove_colors() which uses sed.
+All functions are implemented in shell code (no external binaries called), except remove_colors() which uses sed, and tolower() and toupper() which use tr.
 
 All functions are tested and working.
 
