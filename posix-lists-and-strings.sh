@@ -23,12 +23,12 @@ remove_colors() {
 	printf %s "$1" | sed -e 's/\x1b\[[0-9;]*m//g'
 }
 
-# set IFS to $1 while saving its previous value to variable with the name $2
+# set IFS to $1 while saving its previous value to variable tagged $2
 newifs() {
 	eval "IFS_OLD_$2"='$IFS'; IFS="$1"
 }
 
-# restore IFS value from variable named $1
+# restore IFS value from variable tagged $1
 oldifs() {
 	eval "IFS=\"\$IFS_OLD_$1\""
 }
