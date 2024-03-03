@@ -57,11 +57,12 @@ toupper() {
 
 # primitive alternative to grep
 # 1 - input
-# 2 - leading '*' wildcard (if required)
+# 2 - leading '*' wildcard (if required, otherwise use empty string)
 # 3 - filter string
-# 4 - trailing '*' wildcard (if required)
+# 4 - trailing '*' wildcard (if required, otherwise use empty string)
 # 5 - optional var name for output
 # outputs the 1st match
+# return status is 0 for match, 1 for no match
 get_matching_line() {
 	newifs "$_nl" gml
 	_rv=1; _res=''
