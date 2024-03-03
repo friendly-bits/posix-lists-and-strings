@@ -6,7 +6,7 @@
 # github.com/friendly-bits
 
 # NOTE that some functions only work properly with LC=ALL
-# NOTE that some functions require the $delim variable to be set
+# NOTE that some functions require the $delim and/or the $_nl variables to be set
 # NOTE that some functions depend on other functions included in this library
 
 # you can safely ignore shellcheck warnings
