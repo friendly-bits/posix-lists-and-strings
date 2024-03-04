@@ -74,15 +74,21 @@ get_matching_line() {
 	return $_rv
 }
 
-# trims leading, trailing and extra in-between spaces
-# 1 - output var name
-# input via $2, if unspecified then from previous value of $1
-trimsp() {
-	trim_var="$1"
-	newifs "$trim_IFS" trim
-	case "$#" in 1) eval "set -- \$$1" ;; *) set -- $2; esac
-	eval "$trim_var"='$*'
-	oldifs trim
+# checks if string $1 is included in list $2, with optional field separator $3 (otherwise uses newline)
+# result via return status
+is_included() {
+	_fs_ii="${3:-"$_nl"}"
+	case "$2" in "$1"|"$1$_fs_ii"*|*"$_fs_ii$1"|*"$_fs_ii$1$_fs_ii"*) return 0 ;; *) return 1; esac
+}
+
+# adds a string to a list if it's not included yet
+# 1 - name of var which contains the list
+# 2 - new value
+# 3 - optional delimiter (otherwise uses newline)
+add2list() {
+	a2l_fs="${3:-$_nl}"
+	eval "_curr_list=\"\$$1\""
+	is_included "$2" "$_curr_list" "$a2l_fs" || eval "$1=\"\${$1}$a2l_fs$2\"; $1=\"\${$1#$a2l_fs}\""
 }
 
 # removes duplicate words, removes leading and trailing delimiter, trims in-between extra delimiter characters
@@ -101,17 +107,10 @@ san_str() {
 	_words=
 	newifs "$_sid" san
 	for _w in $inp_str; do
-		is_included "$_w" "$_words" "$_sod" || _words="$_words$_w$_sod"
+		add2list _words "$_w" "$_sod"
 	done
-	eval "$1"='${_words%$_sod}'
+	eval "$1"='$_words'
 	oldifs san
-}
-
-# checks if string $1 is included in list $2, with optional field separator $3 (otherwise uses newline)
-# result via return status
-is_included() {
-	_fs_ii="${3:-"$_nl"}"
-	case "$2" in "$1"|"$1$_fs_ii"*|*"$_fs_ii$1"|*"$_fs_ii$1$_fs_ii"*) return 0 ;; *) return 1; esac
 }
 
 # get intersection of lists $1 and $2, with optional field separator $4 (otherwise uses newline)
@@ -121,9 +120,9 @@ get_intersection() {
 	_fs_gi="${4:-"$_nl"}"
 	_isect=
 	for e in $2; do
-		is_included "$e" "$1" "$_fs_gi" && { is_included "$e" "$_isect" || _isect="$_isect$e$_fs_gi"; }
+		is_included "$e" "$1" "$_fs_gi" && add2list _isect "$e" "$_fs_gi"
 	done
-	eval "$3"='${_isect%$_fs_gi}'
+	eval "$3"='$_isect'
 }
 
 # get difference between lists $1 and $2, with optional field separator $4 (otherwise uses newline)
@@ -149,9 +148,20 @@ subtract_a_from_b() {
 	_fs_su="${4:-"$_nl"}"
 	_subt=
 	for e in $2; do
-		is_included "$e" "$1" "$_fs_su" || is_included "$e" "$_subt" "$_fs_su" || _subt="$_subt$e$_fs_su"
+		is_included "$e" "$1" "$_fs_su" || add2list _subt "$e" "$_fs_su"
 	done
-	eval "$3"='${_subt%$_fs_su}'
+	eval "$3"='$_subt'
+}
+
+# trims leading, trailing and extra in-between spaces
+# 1 - output var name
+# input via $2, if unspecified then from previous value of $1
+trimsp() {
+	trim_var="$1"
+	newifs "$trim_IFS" trim
+	case "$#" in 1) eval "set -- \$$1" ;; *) set -- $2; esac
+	eval "$trim_var"='$*'
+	oldifs trim
 }
 
 # converts whitespace-separated list to newline-separated list
