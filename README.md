@@ -13,6 +13,7 @@ Included functions:
 - trimsp()
 - san_str()
 - is_included()
+- add2list()
 - get_intersection()
 - get_difference()
 - subtract_a_from_b()
