@@ -201,18 +201,19 @@ san_args() {
 	done
 }
 
-# converts input integer to either [x|xK|xM|xT|xQ] or [xB|xKiB|xMiB|xTiB|xPiB], depending on $2
+# converts unsigned integer to either [x|xK|xM|xT|xQ] or [xB|xKiB|xMiB|xTiB|xPiB], depending on $2
 # if result is not an integer, outputs up to 2 digits after decimal point
 # 1 - int
 # 2 - (optional) "bytes"
 num2human() {
-	i=${1:-0} s=0
+	i=${1:-0} s=0 d=0
 	case "$2" in bytes) m=1024 ;; '') m=1000 ;; *) return 1; esac
+	case "$i" in *[!0-9]*) printf '%s\n' "num2human: Invalid unsigned integer '$i'." >&2; return 1; esac
 	for S in B KiB MiB TiB PiB; do
 		[ $((i > m && s < 4)) = 0 ] && break
 		d=$i
-		i=$((i / m))
-		s=$((s + 1))
+		i=$((i/m))
+		s=$((s+1))
 	done
 	[ -z "$2" ] && { S=${S%B}; S=${S%i}; [ "$S" = P ] && S=Q; }
 	d=$((d % m * 100 / m))
