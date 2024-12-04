@@ -1,5 +1,9 @@
 # POSIX LISTS AND STRINGS
-POSIX-compliant shell functions for processing of lists and strings
+POSIX-compliant shell functions for processing of lists and strings.
+
+The main idea is to implement in native, fast and secure shell code functionality for processing lists and strings. The implementation avoids calling external tools as much as possible in order to minimize dependencies and improve performance, and avoids creating subshells which are known to be slow.
+
+**If you find this code useful, please consider giving this repository a star - this helps other people to find it.**
 
 Included functions:
 - set_ansi()
@@ -39,5 +43,3 @@ All functions are tested and working.
 Read code comments to understand what each function is doing and how to use it.
 
 If you are interested in POSIX-compliant shell code, check out my other repositories.
-
-**If you find this code useful, please consider giving this repository a star.**
