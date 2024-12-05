@@ -58,13 +58,11 @@ conv_case() {
 		toupper) tr_1='a-z' tr_2='A-Z' ;;
 		tolower) tr_1='A-Z' tr_2='a-z'
 	esac
-	newifs "$default_IFS" conv
 	case "$3" in
 		*[$tr_1]*) conv_res="$(printf %s "$3" | tr "$tr_1" "$tr_2")" ;;
 		*) conv_res="$3"
 	esac
 	eval "$outvar_cc=\"$conv_res\""
-	oldifs conv
 }
 
 # 1 - var name for output
