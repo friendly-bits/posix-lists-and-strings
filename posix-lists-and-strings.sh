@@ -307,6 +307,133 @@ compare_files() {
 	awk_cmp "$1" "$2" && awk_cmp "$2" "$1"
 }
 
+# replaces sequence of lines $1 with $2, from file $3
+# if $4 is specified, replaces all the lines from sequence $1 to (including) sequence $4
+# ignores empty lines, ignores leading whitespaces and tabs
+# if no match found for sequence $1 or $4, returns code 1
+# output to STDOUT
+
+# 1 - lines sequence to replace
+# 2 - replacement sequence
+# 3 - path to file
+# 4 - if specified, serves as the closing pattern
+replace_lines_seq() {
+	[ "$1" ] && [ "$2" ] && [ "$3" ] || return 2
+	[ -f "$3" ] || return 3
+
+	printf '%s\n' "$1" | awk -v endptrn="$4" -v repl="$2" '
+		# variables:
+		# repl - replacement sequence
+		# a - array of 1st sequence lines
+		# e - array of 2nd sequence lines
+
+		# i - count of 1st sequence lines
+		# l - count of 2nd sequence lines
+		# k - count of matched 1st sequence lines
+		# j - count of matched 2nd sequence lines
+
+		# m1 - 1st sequence matched (1=true)
+		# m2 - 2nd sequence matched (1=true)
+
+		BEGIN{
+			i=0
+			j=0
+			k=0
+			m1=0
+			m2=0
+
+			# create array "e" while removing empty lines and leading whitepspaces/tabs
+			split(endptrn,e1,"\n")
+			n=1
+			for (z in e1) {if (e1[z]) {sub(/^[ 	]+/,"",e1[z]); e[n]=e1[z]; n++}; z++}
+			l=length(e)
+		}
+
+		# create array "a" while removing empty lines and leading whitepspaces/tabs
+		NR==FNR {
+			sub(/^[ 	]+/,""); if (!$0) {next}; a[i]=$0; i++; next
+		}
+
+		# sanity check
+		!a[1] {exit}
+
+		{
+			line=$0
+			assign input to line while removing leading whitespaces and tabs
+			sub(/^[ 	]+/,"",line)
+		}
+
+		# if first sequence matched
+		m1==1 {
+
+			# if second sequence matched, print input line as-is and continue
+			if (m2==1) {print $0;next}
+
+			# if second sequence has not matched:
+
+			# ignore empty lines
+			if (line) {
+
+				# if actual line does not match expected 2nd sequence line "e[j+1]", reset counter and continue
+				if (line != e[j+1]) {
+					j=0
+					next
+				}
+			}
+			j++
+
+			# if expected count of lines in the 2nd sequence matched, print replacement sequence and set the m2 flag
+			if (j>=l) {print repl; m2=1}
+			next
+		}
+
+		# if 1st sequence has not matched:
+
+		{
+			# if current line does not match expected 1st sequence line a[k],
+			# then print accumulated cache, reset cache and matched lines count
+			if (line != a[k]) {
+				if (line) {
+					k=0
+					printf "%s", cache
+					cache=""
+				}
+
+				# print current line and continue
+				print $0
+				next
+			}
+		}
+
+		# if current line matches expected line a[k]:
+
+		{
+			k++
+
+			# add current line to cache
+			cache=cache $0 "\n"
+
+			# if expected count of lines in the 1st sequence matched:
+			if (k==i) {
+
+				# if there is no 2nd sequence, print replacement sequence and set the m2 flag
+				if (!endptrn) {print repl; m2=1}
+
+				# set the m1 flag
+				m1=1
+				k=0
+			}
+			next
+		}
+
+		END{
+			# exit with code 1 if 1st sequence did not match, or if there is 2nd sequence and it did not match
+			if (m1 != 1 || (endptrn && m2 != 1)) {exit 1}
+			exit 0
+		}
+		' - "$3"
+}
+
 
 LC_ALL=C
 _nl='
