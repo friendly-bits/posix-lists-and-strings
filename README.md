@@ -30,11 +30,12 @@ Included functions:
 - san_args()
 - num2human()
 - compare_files()
+- replace_lines_seq()
 
 All functions are implemented in shell code (no external binaries called), except:
 - remove_colors() which uses sed
 - conv_convert(), tolower() and toupper() which use tr
-- compare_files() which uses awk
+- compare_files(), replace_lines_seq() which use awk
 
 Many functions use eval in order to avoid creating subshells. Some functions check input with is_str_safe() to make sure that input won't cause issues with eval.
 
