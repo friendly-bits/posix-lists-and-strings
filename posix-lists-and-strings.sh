@@ -118,7 +118,7 @@ is_alphanum() {
 	:
 }
 
-# checks if string $1 is included in list $2, with optional field separator $3 (otherwise uses newline)
+# checks if string $1 is included in list $2, with optional field separator $3 (otherwise uses whitespace)
 # result via return status
 is_included() {
 	_fs_ii="${3:- }"
