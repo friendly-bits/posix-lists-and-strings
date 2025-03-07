@@ -36,8 +36,6 @@ The main idea is to implement in native, fast and secure shell code functionalit
 - get_difference() : get difference between lists `$1` and `$2`, with optional delimiter `$4` (otherwise assumes whitespace)
 - subtract_a_from_b() : subtract list `$1` from list `$2`, with optional delimiter `$4` (otherwise assumes whitespace)
 
-Functions avoid creating unncesseary subshells (because creating subshells is slow).
-
 All functions are implemented in shell code (no external binaries called), except:
 - remove_colors() which uses sed
 - conv_case(), tolower() and toupper() which use tr
