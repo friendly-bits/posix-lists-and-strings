@@ -297,12 +297,19 @@ num2human() {
 # ignores empty lines
 # returns 0 for no diff, 1 for diff, 2 for error
 compare_files() {
-	awk_cmp() {
-		awk 'NF==0{next} NR==FNR {A[$0]=1;a++;next} {b++} !A[$0]{r=1;exit} END{if(!a&&!b){exit 0};if(!a||!b){exit 1};exit r}' r=0 "$1" "$2"
-	}
-
 	[ -f "$1" ] && [ -f "$2" ] || { printf '%s\n' "compare_files: file '$1' or '$2' does not exist." >&2; return 2; }
-	awk_cmp "$1" "$2" && awk_cmp "$2" "$1"
+	awk '
+		NF==0{next}
+		NR==FNR {A[$0];a=1;next}
+		{if (!($0 in A)){r=1;exit}; B[$0];b=1;next}
+		END{
+			if(r==1){exit 1}
+			if(!a&&!b){exit 0}
+			if(!a||!b){exit 1}
+			for (a in A) if (!(a in B)){exit 1}
+			exit 0
+		}
+	' "$1" "$2"
 }
 
 # replaces sequence of lines $1 with $2, from file $3
